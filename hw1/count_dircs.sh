@@ -6,21 +6,21 @@
 #    with “R” and a last name that begins with “S” and occurred between 2010 and
 #    2013.
 
-DATA_ECE_3822="/home/devin/projects/data/*";
+DATA_ECE_3822="/home/devin/projects/data/";
 
 # Count the total number of directories
 echo "Total number of Dirs:"
-ls -iR $DATA_ECE_3822 | wc -w
+find $DATA_ECE_3822 -type d | wc -l
 
 echo ""
 # Count the number of files
 echo "Total number of Files:"
-find $DATA_ECE_3822 | wc -w
+find $DATA_ECE_3822 -type f | wc -l
 
 echo ""
 # Count number of files that begin in "R" and "S" last name and 2010-13
 echo "Number of Patients begin with R first name and last name S"
-find $DATA_ECE_3822 -path '*/R*' | grep '_S' | grep '_2010\|_2011\|_2012\|_2013' |wc -w
+find $DATA_ECE_3822 -type d -path '*/R*' | grep '_S' | grep '_2010\|_2011\|_2012\|_2013' | wc -l
 
 echo ""
 # Assignment hw1 (part3):
@@ -35,16 +35,18 @@ echo ""
 # grep
 #    -i: ignore case
 #    -R: recursive (search in sub-directories)
-# cut -d: -f1 Source: Only print the filename of the occurance 
-# sort | uniq: even if the word occured twice in one file only display it once.
-#    We are looking for unique occurances
+#    -w: match whole word
+#    -l: stop searching the file once a match is found (avoid duplicates)
 # <Source: http://www.cyberciti.biz/faq/howto-search-find-file-for-text-string/>
 
 echo "Occurances of the word Spike:"
-grep -iR 'spike' $DATA_ECE_3822 | cut -d: -f1 | sort | uniq | wc -w
+grep -iwlR 'spike' $DATA_ECE_3822 | wc -l
 echo "Occurances of the word Seizure:"
-grep -iR 'seizure' $DATA_ECE_3822 | cut -d: -f1 | sort | uniq | wc -w
+grep -iwlR 'seizure' $DATA_ECE_3822 | wc -l
+# grep -ilRE 'spike.*seizure' $DATA_ECE_3822 | wc -l
 
-echo "Histogram of words with Spike|Seizure:"
-grep -iR 'spike' $DATA_ECE_3822 | cut -d: -f1 | sort | uniq | wc -w
+echo "Outputing histogram of words for files that contain spike."
+cat `grep -iwlR 'spike' $DATA_ECE_3822` | tr -sc '[A-Z][a-z]' '[\012*]' | sort | uniq -c | sort -nr > spike_files.hist
 
+echo "Outputing histogram of words for files that contain seizure."
+cat `xargs grep -iwlR 'seizure' $DATA_ECE_3822` | tr -sc '[A-Z][a-z]' '[\012*]' | sort | uniq -c | sort -nr > seizure_files.hist
