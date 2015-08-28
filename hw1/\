@@ -39,14 +39,25 @@ echo ""
 #    -l: stop searching the file once a match is found (avoid duplicates)
 # <Source: http://www.cyberciti.biz/faq/howto-search-find-file-for-text-string/>
 
+
+
 echo "Occurances of the word Spike:"
 grep -iwlR 'spike' $DATA_ECE_3822 | wc -l
 echo "Occurances of the word Seizure:"
 grep -iwlR 'seizure' $DATA_ECE_3822 | wc -l
-# grep -ilRE 'spike.*seizure' $DATA_ECE_3822 | wc -l
+echo "Occurances of the word Spike & Seizure:"
+grep -ilRE 'spike.*seizure' $DATA_ECE_3822 | wc -l
 
+# If ran before clean up output files
+rm -f spike_files.hist
+rm -f seizure_files.hist
 echo "Outputing histogram of words for files that contain spike."
-cat `grep -iwlR 'spike' $DATA_ECE_3822` | tr -sc '[A-Z][a-z]' '[\012*]' | sort | uniq -c | sort -nr > spike_files.hist
+#xargs -0 -P4 cat `grep -iwlR 'spike' $DATA_ECE_3822` | tr -sc '[A-Z][a-z]' '[\012*]' | sort | uniq -c | sort -nr >> spike_files.hist
+
+grep -iwlR 'spike' $DATA_ECE_3822 | xargs -P4 cat | tr -sc '[A-Z][a-z]' '[\012*]' | sort | uniq -c | sort -nr >> spike_files.hist
+
 
 echo "Outputing histogram of words for files that contain seizure."
-cat `xargs grep -iwlR 'seizure' $DATA_ECE_3822` | tr -sc '[A-Z][a-z]' '[\012*]' | sort | uniq -c | sort -nr > seizure_files.hist
+#cat `xargs grep -iwlR 'seizure' $DATA_ECE_3822` | tr -sc '[A-Z][a-z]' '[\012*]' | sort | uniq -c | sort -nr >> seizure_files.hist
+grep -iwlR 'seizure' $DATA_ECE_3822` | xargs -P4 cat | tr -sc '[A-Z][a-z]' '[\012*]' | sort | uniq -c | sort -nr >> seizure_files.hist
+
