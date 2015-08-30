@@ -7,7 +7,6 @@
 #    2013.
 
 DATA_ECE_3822="/home/devin/projects/data/";
-
 # Count the total number of directories
 echo "Total number of Dirs:"
 find $DATA_ECE_3822 -type d | wc -l
@@ -55,22 +54,22 @@ echo "Number of files that match Subset B:"
 grep -iwlR 'seizure' $DATA_ECE_3822 > subsetb.list
 wc -l subsetb.list
 echo "Number of files that match Subset C:"
-grep -ilRE 'spike.*seizure' $DATA_ECE_3822 > subsetc.list
+grep -iwlRE 'spike.*seizure' $DATA_ECE_3822 > subsetc.list
 wc -l subsetc.list
 
 echo ""
 # Produce Histogram
 echo "Producing histogram of words in Subset A."
 xargs cat < subseta.list | tr -sc '[A-Z][a-z]' '[\012*]' > subseta.words
-sort subseta.words | uniq -c | sort -nr > subseta.hist
+sort subseta.words | uniq -ic | sort -nr > subseta.hist
 echo "    Histogram saved to subseta.hist"
 
 echo "Producing histogram of words in Subset B."
-xargs cat < subsetb.list | tr -sc '[A-Z][a-z]' '[\012*]' | sort | uniq -c | sort -nr >> subsetb.hist
+xargs cat < subsetb.list | tr -sc '[A-Z][a-z]' '[\012*]' | sort | uniq -ic | sort -nr >> subsetb.hist
 echo "    Histogram saved to subsetb.hist"
 
 echo "Producing histogram of words in Subset C."
-xargs cat < subsetc.list | tr -sc '[A-Z][a-z]' '[\012*]' | sort | uniq -c | sort -nr >> subsetc.hist
+xargs cat < subsetc.list | tr -sc '[A-Z][a-z]' '[\012*]' | sort | uniq -ic | sort -nr >> subsetc.hist
 echo "    Histogram saved to subsetc.hist"
 
 # Assignment hw1 (part4):
@@ -81,7 +80,7 @@ echo "Producing histogram of bigrams in Subset A."
 ## Create a list of subseta.words+1
 tail -n +2 subseta.words > subseta.nextwords
 ## Merge the two words lists together and create histogram
-paste subseta.words subseta.nextwords | sort | uniq -c | sort -nr > subseta_bi.hist
+paste subseta.words subseta.nextwords | sort | uniq -ic | sort -nr > subseta_bi.hist
 echo "    Histogram saved to subseta_bi.hist"
 
 # File cleanup
