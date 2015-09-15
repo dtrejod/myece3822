@@ -35,7 +35,10 @@ do
     fi
 
     # Play song
-    sed -n 1p .tmp_mp3playlist #|  mpg123 -q 
+    PLAYSONG=$(head -n 1 .tmp_mp3playlist)
+    #echo $PLAYSONG
+    mpg123 -q $PLAYSONG
+    #sed -n 1p .tmp_mp3playlist #|  mpg123 -q 
     sed -n '1d' .tmp_mp3playlist
 
     # Check to see if playlist is empty and delete file if true
