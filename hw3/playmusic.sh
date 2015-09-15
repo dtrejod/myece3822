@@ -23,6 +23,7 @@ elif [ $# -gt 1 ]; then
   exit 2
 fi
 
+# Play forever
 while true
 do
     # Check if a playlist exsits already. If not generate one.
@@ -36,15 +37,18 @@ do
 
     # Play song
     PLAYSONG=$(head -n 1 .tmp_mp3playlist)
-    #echo $PLAYSONG
+    # echo $PLAYSONG
+    # We use mpg123 to play the mp3 file
+    #     -q : quiet option so song plays in the background with no stdout.
     mpg123 -q $PLAYSONG
-    #sed -n 1p .tmp_mp3playlist #|  mpg123 -q 
+    
+    # Delete the first line of the playlist (remove the last played song)
     sed -n '1d' .tmp_mp3playlist
 
     # Check to see if playlist is empty and delete file if true
     if [ -s .tmp_mp3playlist ]
     then
-        # Cleanup and regenerate
+        # Cleanup and so next pass playlist regenerates
         rm .tmp_mp3playlist .tmp_mp3list
         #echo "Generating new playlist"
     fi
