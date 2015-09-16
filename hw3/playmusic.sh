@@ -26,7 +26,7 @@ fi
 while true
 do
     # Check if a playlist exsits already. If not generate one.
-    if [ ! -s .tmp_mp3playlist ]
+    if [ ! -e .tmp_mp3playlist ]
     then
         # Create a playlist of '.mp3' files
         find $1 -iname "*.mp3" > .tmp_mp3list
@@ -38,15 +38,13 @@ do
     PLAYSONG=$(head -n 1 .tmp_mp3playlist)
     #echo $PLAYSONG
     mpg123 -q $PLAYSONG
-    #sed -n 1p .tmp_mp3playlist #|  mpg123 -q 
-    sed -n '1d' .tmp_mp3playlist
+    tail -n +2 .tmp_mp3playlist
 
     # Check to see if playlist is empty and delete file if true
     if [ -s .tmp_mp3playlist ]
     then
         # Cleanup and regenerate
         rm .tmp_mp3playlist .tmp_mp3list
-        #echo "Generating new playlist"
+        echo "Generating new playlist"
     fi
 done
-
