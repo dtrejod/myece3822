@@ -11,8 +11,8 @@ float ece_3822_add_sin(float x, float y){
     float out, xsin, ysin;
 
     // Take the sin of both numbers
-    xsin = sinf(x);
-    ysin = sinf(y);
+    xsin = sin(x);
+    ysin = sin(y);
     out = xsin + ysin;
     return out;
 }
