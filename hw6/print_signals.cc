@@ -2,6 +2,7 @@
 # include <string.h>
 # include <getopt.h>
 # include <stdlib.h>
+# include <unistd.h>
 
 /*
 // C++ Progam
@@ -20,6 +21,7 @@
 // Functiions
 //
 
+// Buffer size in bytes
 static const int buffer_size=1024;
 
 int parse_signal_file(int data_inter, int show_line, FILE* fp){
@@ -28,68 +30,49 @@ int parse_signal_file(int data_inter, int show_line, FILE* fp){
     //
     long line_num = 0;
      
-    char buffer[buffer_size*8];
-    // Read in data in buffer_size chunks until end of file
+    // Create a buffer of size buffer_size in bits
     //
-    while ((fread(buffer, buffer_size, 1, fp) == 1)){
-        // fprintf(stdout, "Debug RAW: %s\n", buffer);
-        //
-
-        // Parse the buffer into data-size bytes
-        //
-
-        // We parse buffer as a 16 bit integer (or 2 bytes
-        if(data_inter == 0){
-            int sub_buffer;
-            for(int i = 0; i <= buffer_size, i = i+2){
-                sub_buffer = atoi(buffer
-                if (show_line == 1){
-                    fprintf(stdout, "%08d: %d\n", line_num,atoi(buffer));
-                    line_num+=1; 
-                }
-                else{
-                    fprintf(stdout, "%d\n", atoi(buffer));
-               }    
-            
-            }
-        
-        }
-
-        // Print data
-         
-        else{
-            if(data_inter == 0){
-
-            }
-            else{
-                fprintf(stdout, "%f\n", atof(buffer));
-            }
-        }
-    }   
-    return 0;
-}
-
-/*
-int parse_signal_file(float buffer, int show_line, FILE* fp){
     
-    // Line number tracker
-    //
-    long line_num = 0;
-     
-    // Parse file until end of file
-    //
-    while ((fread(buffer, buffer_size, 1, fp) == 1)){
-        if (show_line == 1){
-            fprintf(stdout, "%d: %f\n", line_num, buffer);
-            line_num += 1;
-        }   
-        else{
-            fprintf(stdout, "%f\n", buffer);
+    if (data_inter == 0){
+        short int buffer[buffer_size];
+        // Read in data in buffer_size chunks until end of file
+        //
+        while (fread(buffer, sizeof(short int), 
+                        buffer_size, fp) != 0){
+            // We parse buffer into data_size bits
+            //
+            for(int i = 0; i <= sizeof(buffer) / sizeof(short int); i++){
+                // If showline number is true then display line number
+               //fprintf(stdout, "i = %d ", i); 
+                if (show_line == 1){
+                    fprintf(stdout, "%08d:    ", line_num);
+                    line_num += 1;
+                }
+                fprintf(stdout, "%hd\n", buffer[i]);
+            }
+        }
+    }
+    else{
+        float buffer[buffer_size];
+        // Read in data in buffer_size chunks until end of file
+        //
+        while (fread(buffer, sizeof(float),
+                        buffer_size, fp) != 0){
+            // We parse buffer into data_size bits
+            // //
+            for(int i = 0; i <= sizeof(buffer) / sizeof(float); i++){
+               // If showline number is true then display line number
+               //fprintf(stdout, "i = %d ", i); 
+                if (show_line == 1){
+                    fprintf(stdout, "%08d:    ", line_num);
+                    line_num += 1;
+                }
+                fprintf(stdout, "%g\n", buffer[i]);
+            }
         }
     }
     return 0;
 }
-*/
 
 // Input Arugment Structure
 //
@@ -105,7 +88,7 @@ static struct option long_options[] = {
 };   
 
  
-// Invalid usage. Print proper usage
+//  Print program  proper usage function
 //
 void print_usage(){
     printf("Usage: print_signals [options] file \n"
@@ -162,28 +145,47 @@ int main (int argc, char *argv[]){
     //
     printf("Display Paramters:\n");
     if (show_line){
-        printf("    Displaying line numbers\n");
+        printf("    - [✓] Display line numbers\n");
     }
     else{
-        printf("    Not displaying line numbers\n");
+        printf("    - [ ] Display line numbers\n");
     }
     if (data_inter){
-        printf("    Interpreting data as 4 byte floats\n");
+        printf("    - [ ] Interpret data as 16 bit intergers\n");
+        printf("    - [✓] Interpret data as 4 byte floats\n");
     }
     else{
-        printf("    Interpreting data as 16 bit intergers\n");
+        printf("    - [✓] Interpret data as 16 bit intergers\n");
+        printf("    - [ ] Interpret data as 4 byte floats\n");
     }
 
-    printf("\n\n");
+    printf("\n");
+    FILE* fp;
+    
+    // Check for piped input
+    //
+    if (isatty(fileno(stdin)) == 0) {
+    // Display which file we are currently processing
+    //
+    fp = stdin;
+
+    printf("\nProcessing from stdin:\n");
+    // Call function to interpret data
+    //
+    parse_signal_file(data_inter, show_line, fp);
+
+    }
+    // Parse each input file
+    //
     for (i = optind; i < argc; i++){
         // Display which file we are currently processing
         //
-        printf("Processing file: %s\n", argv[i]);
+        printf("\nProcessing file: %s\n", argv[i]);
         
         // Open file
         //
         FILE* fp;
-        fp = fopen(argv[i], "r");
+        fp = fopen(argv[i], "rb");
 
         // Check if file exists
         //
@@ -193,8 +195,9 @@ int main (int argc, char *argv[]){
             printf("Error. File '%s' does not exsit\n", argv[i]);    
             continue;
         }
+        // Call function to interpret data
+        //
         parse_signal_file(data_inter, show_line, fp);
     }
+    return 0;
 }
-
-   
