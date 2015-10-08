@@ -37,10 +37,12 @@ void print_usage(){
                 "   -f, --float         Interpret data as 4-byte floating "
                                         "point numbers\n"
                 "   -i, --integer       Interpret data as 16-bit integers\n"
-                "Default:\n"
-                "   - No line numbers are displayed\n"
-                "   - Default data is inputed at 16-bit integers\n");
+                "Default Paramters:\n"
+                "   - [ ] Display line numbers\n"
+                "   - [✓] Interpret data as 16 bit intergers\n"
+                "   - [ ] Interpret data as 4 byte floats\n");
 }
+
 
 int main (int argc, char *argv[]){
     // Default Values:
