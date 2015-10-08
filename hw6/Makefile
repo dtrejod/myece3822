@@ -1,4 +1,4 @@
-# Make hw_04.exe
+# Make hw_05.exe
 
 hw_05.exe: print_signals.o devsig.o
 	gcc devsig.o print_signals.o -o print_signals.exe -lm
