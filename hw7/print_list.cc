@@ -1,5 +1,5 @@
 # include <stdio.h>
-# include <getop.h>
+# include <getopt.h>
 # include <stdlib.h>
 # include <unistd.h>
 
@@ -31,14 +31,14 @@ class nameNode{
         // Class Functions
         //
         void insertName(char*);
-        void setNext(NL*);
-        NL* getNext(void);
-        char getName(void);
+        void setNext(nameNode*);
+        nameNode* getNext(void);
+        char* getName(void);
     private:
         char name[CHAR_LEN];
-        NL* next;
+        nameNode* next;
     protected:
-}
+};
 
 nameNode::nameNode(void){
     // Constructor
@@ -51,25 +51,25 @@ nameNode::~nameNode(void){
 
 // Set the name of this nameNode
 //
-void nameNode::insertName(char person){
-    name = person;
+void nameNode::insertName(char* person){
+    name = *person;
 }
 
 // Set the next nameNode
 //
-void nameNode::setNext(NL* nextName){
+void nameNode::setNext(nameNode* nextName){
     next = nextName;
 }
 
 // Get the this nameNodes pointer to the  next nameNode
 //
-NL* nameNode::getNext(void){
+nameNode* nameNode::getNext(void){
     return(next);
 }
 
 // Get this nameNode's name
 //
-char nameNode::getName(void){
+char*  nameNode::getName(void){
     return(name);
 }
 
@@ -113,7 +113,7 @@ class NL{
         void swapNodes(nameNode* current);
    protected:
     
-}
+};
 
 NL::NL(void){
     // Constructor
@@ -131,16 +131,21 @@ void NL::swapNodes(nameNode* current){
     // Setup temporary nameNode holder variable
     //
     nameNode* temp;
-    
+    nameNode* temp2;
+
     // Set the current nodes next node to the temp nextNode
     //
     temp = current.getNext();
+    temp2 = temp.getNext();
 
-    temp.setNext()
-
+    // Reorganize the order of the linked list
+    //
+    temp.setNext(current);
+    current.setNext(temp2);
 }
-int NL::getLegnth(void){
-    return legnth;
+
+int NL::getLength(void){
+    return length;
 }
 
 // Input Name into class data
@@ -154,15 +159,18 @@ void NL::read(FILE* fp){
     //
     int i = 0;
     
+    // Current Character Tracker
+    //
+    int c; 
     // Create a nameNode to store name
     //
-    node = new nameNode;
+    nameNode node;
 
     // Set the head of the nameList (NL) equal to the firs nameNode
     //
-    head = node;
+    head = &node;
 
-    while((c=fgetc(fp) != EOF){
+    while((c=fgetc(fp) != EOF)){
         if (c=='\n'){
             // Store Name in class
             //
@@ -170,8 +178,8 @@ void NL::read(FILE* fp){
             
             // Create the new nameNode and point the previous to the next
             //
-            nodeNew = new nameNode;
-            node.setNext(nodeNew);
+            nameNode nodeNew;
+            node.setNext(&nodeNew);
             node = nodeNew;
 
             // Reset read in temp variables
@@ -194,7 +202,7 @@ void NL::print(void){
     //
     currentNode = head;
     do{
-        fprintf(stdout, "%s\n", currentNode.getName);
+        fprintf(stdout, "%s\n", currentNode.getName());
         currentNode = currentNode.getNext();
     } (currentNode != last)
 }
@@ -202,9 +210,21 @@ void NL::print(void){
 void NL::sort(void){
    // Use bubble sort to sort this nameList (NL)
    //
-   nameNode* currentNode;
-
-   for currentNode = 
+   nameNode* currentNode = head;
+   bool swapped;
+   index = 0;
+   while(1){
+        swapped = false;
+        for (int i = 0; i <= legnth; i++){
+            if(currentNode.getNext().getName()[0] - currentNode.getName()[0]){
+                swapNodes(currentNode)
+                swapped = true;
+            }
+            currentNode = currentNode.getNext();
+        }
+        if (swapped = false){
+            break;
+        }
 }
 
 // Input Arugment Structure
@@ -272,7 +292,7 @@ int main (int argc, char *argv[]){
         printf("Error. File '%s' does not exsit.\n", argv[i]);
         exit(EXIT_FAILURE);
     }
-    nameList = new NL;
+    NL nameList;
     nameList.read(fp);
     
     // Sort NameList if flag is set
