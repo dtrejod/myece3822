@@ -7,17 +7,16 @@ def main(argv):
     
     # open file
     with open(argv[1]) as f:
+        # for each line in the file
         for line in f: 
-            for t in line.split():
-                try:
-                    fileNums.append(float(t))
-                except ValueError:
-                    pass
-            # Extract all numbers from this line
-            #
-            #if c.isdigit():
-            #    # if nunmber is digit add to list
-            #    fileNums.append(int(c))
+            # extra the last word in the line
+            word = line.rsplit(' ', 1)[-1]
+            # try to append the last word to our numbered list
+            try:
+                # append last word to our list of numbers
+                fileNums.append(float(word))
+            except ValueError:
+                pass
 
     # Sum numbers and print
     #

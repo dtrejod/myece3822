@@ -17,64 +17,6 @@ static const int CHAR_LEN = 255;
 
 // Classes
 //
-
-// nameNode stores a persons name and a pointer to the next nameNode
-//
-class nameNode{
-    public:
-        // Constructor
-        //
-        nameNode();
-
-        // Destructor
-        ~nameNode();
-
-        // Class Functions
-        //
-        void insertName(char*);
-        void setNext(nameNode*);
-        nameNode* getNext(void);
-        char* getName(void);
-    private:
-        char* name;
-        nameNode* next;
-    protected:
-};
-
-nameNode::nameNode(void){
-    // Constructor
-    //
-}
-nameNode::~nameNode(void){
-    // Destructor
-    //
-    delete [] name;
-}
-
-// Set the name of this nameNode
-//
-void nameNode::insertName(char* person){
-    name = person;
-}
-
-// Set the next nameNode
-//
-void nameNode::setNext(nameNode* nextName){
-    next = nextName;
-}
-
-// Get the this nameNodes pointer to the  next nameNode
-//
-nameNode* nameNode::getNext(void){
-    return(next);
-}
-
-// Get this nameNode's name
-//
-char*  nameNode::getName(void){
-    return(name);
-}
-
 // NL is a linked list that stores a list of nameNodes
 //
 class NL{
@@ -96,14 +38,12 @@ class NL{
         void write(void);
         void print(void);
         int getLength(void);
-        void sort(void);
     private:
         // Store data in private
         //
 
-        // head always points to the first nameName in the linked list
+        // Store a list of names
         //
-        nameNode* head;
 
         // last points to the last nameNode in the linked list
         //
@@ -189,11 +129,11 @@ void NL::read(FILE* fp){
 
             // Store Name in class
             //
-            node.insertName(nodeName);
+            node.setName(nodeName);
             
             // Create the new nameNode and point the previous to the next
             //
-            nameNode* nodeNew;
+            nameNode nodeNew*;
             node.setNext(nodeNew);
             node = nodeNew;
 
@@ -232,7 +172,7 @@ void NL::sort(void){
         swapped = false;
         for (int i = 0; i <= legnth; i++){
             if(currentNode.getNext().getName()[0] - currentNode.getName()[0]){
-                swapNodes(currentNode);
+                swapNodes(currentNode)
                 swapped = true;
             }
             currentNode = currentNode.getNext();
