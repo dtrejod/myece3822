@@ -54,7 +54,7 @@ class NL{
         // Read in File
         //
         void read(FILE*);
-        void write(void);
+        //void write(void);
         void print(void);
         void sort(void);
         void debug(void);
@@ -121,10 +121,9 @@ int NL::getLength(void){
         debug(funName);
         delete [] funName;
     }
-    // Return legnth - 1 since legnth store the location of where we would
-    // place the next name in our names char pointer array
+    // Return legnth 
     //
-    return length - 1;
+    return length;
 }
 
 // Input Name into class data
@@ -242,7 +241,7 @@ void NL::sort(void){
 // Print debuging info
 // 
 void NL::debug(char* delim){
-    fprintf(stdout, "Function call: %s\n", delim);
+    fprintf(stdout, "DEBUG:FUNCTION CALL: %s\n", delim);
 }
 
 // Enable debuging
@@ -268,6 +267,7 @@ static struct option long_options[] = {
         {"debug", no_argument, 0 ,'d'},
         {"sort",  no_argument, 0, 's'},
         {"help",  no_argument, 0, 'h'},
+        {"length", no_argument,0, 'l'},
         {0,       0,           0, 0}
 };   
 
@@ -285,7 +285,9 @@ void print_usage(void){
                 "Options:\n"
                 "   --help, -h          Print help file\n"
                 "   --debug, -d         Debug program\n"
-                "   --sort, -s          Sort input file alphabetically\n");
+                "   --sort, -s          Sort input file alphabetically\n"
+                "   --length, -l        Print the number of names in the "
+                                        "file\n");
 }
 
 // Compares to char arrays (aka strings) and determines which comes first
@@ -375,10 +377,11 @@ int main (int argc, char *argv[]){
     int opterr = 0;
     bool debugF = false;
     bool sortF = false;
+    bool lenF = false;
 
     // Parse input arugments
     //
-    while ((opt = getopt_long(argc, argv, "dsh", long_options, 
+    while ((opt = getopt_long(argc, argv, "dshl", long_options, 
                 &opterr)) != -1){
         switch(opt){
             case 'd':
@@ -386,6 +389,9 @@ int main (int argc, char *argv[]){
                 break;
             case 's':
                 sortF = true;
+                break;
+            case 'l':
+                lenF = true;
                 break;
             case 'h':
                 print_usage();
@@ -413,7 +419,10 @@ int main (int argc, char *argv[]){
         if (sortF) {
             nameList.sort();
         }
-        
+        if (lenF){
+           fprintf(stdout, "Number of names in file = %d\n", 
+                   nameList.getLength());
+        }   
         // Print Name List Nicely
         //
         nameList.print();

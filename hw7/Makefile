@@ -1,5 +1,5 @@
 # Makefile for exam2 rework
 #
 
-foo.exe: foo.cc
-	g++ foo.cc -o foo.exe -lm -g #-O2
+print_list.exe: print_list.cc
+	g++ print_list.cc -o print_list.exe -lm -g #-O2
