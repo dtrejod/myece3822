@@ -29,8 +29,6 @@ class PrimeDates():
         # For each line in our file
         #
         for lineO in file:
-            # Skip line if it is blank
-            #
             # Strip line of leading/trailing space. Especially for that 
             # pesky new line character
             #
@@ -41,11 +39,10 @@ class PrimeDates():
             if lineO == '':
                 continue
            
-            # Append to our class data list each line in the file
-            #
-            
             # First remove any special characters from the line using a
-            # regex 
+            # regex. Note this also removes spaces and makes every date
+            # be in the following format:
+            # <MONTH>DDYYYY
             #
             line = re.sub('[^a-zA-Z0-9-_*.]', '', lineO)
             
@@ -54,11 +51,14 @@ class PrimeDates():
             try:
                 self.listDates.append(self.__loadDate__(line))
             except ValueError:
-                print("There was an error recongizing the date " + \
-                    lineO + ". Please make sure the month and date " + \
-                    "is valid. (Note: A year is not required)")
+                print("There was an error recongizing the date '" + \
+                    lineO + "'. Please make sure the month, date, " + \
+                    "and year valid. \n\tExample: Feb 12 2015 | " + \
+                    "Feburary 12, 1990 | 01122015")
                 sys.exit(1)
     
+    # Local class function that tries to parse date into format
+    #
     def __loadDate__(self, strDate):
         # We try to read the date time in multiple different formats
         #
@@ -75,20 +75,14 @@ class PrimeDates():
             return time.strptime(strDate,"%b%d%Y")
         except ValueError:
             pass
-       
-        # Try to with data in short month format without year
+
+        # Try to read with date in numerical month format
         #
         try:
-            return time.strptime(strDate,"%b%d")
-        except ValueError:
-            pass
-        # Try to read the date without the year
-        #
-        try:
-            return time.strptime(strDate,"%B%d")
+            return time.strptime(strDate,"%m%d%Y")
         except ValueError:
             raise ValueError
-
+       
     # Print to the console the contents of our list
     # by checking if it is a prime number
     #
@@ -105,15 +99,15 @@ class PrimeDates():
             if (self.__isprime__(int(i))):
                 # If is a prime number print prime number message
                 #
-                print(time.strftime("%B %d", item) + " corresponds to " +\
-                        "the integer " + i + ", and is a " + \
+                print(time.strftime("%B %d, %Y", item) + " corresponds " +\
+                        "to the integer " + i + ", and is a " + \
                         "prime number")
             else:
                 # If is NOT a prime number print non-prime number 
                 # message
                 #
-                print(time.strftime("%B %d", item) + " corresponds to " +\
-                        "the integer " + i + ", and is not a " + \
+                print(time.strftime("%B %d, %Y", item) + " corresponds " +\
+                        "to the integer " + i + ", and is not a " + \
                         "prime number")
 
     # We declare a 'private' python function to check if the number passed
