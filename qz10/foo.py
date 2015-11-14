@@ -17,8 +17,7 @@ def main(argv):
     #
     myDates.read(argv[1])
     myDates.convert()
-    myDates.myPrint()
-
+    
     # Exit Gracefully
     #
     print("Program Finished successfully.")
