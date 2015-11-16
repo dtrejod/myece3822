@@ -6,7 +6,7 @@
 #    with “R” and a last name that begins with “S” and occurred between 2010 and
 #    2013.
 
-DATA_ECE_3822="/home/devin/projects/data/";
+DATA_ECE_3822="/home/devin/projects/data/eeg/";
 # Count the total number of directories
 echo "Total number of Dirs:"
 find $DATA_ECE_3822 -type d | wc -l

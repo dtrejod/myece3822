@@ -27,6 +27,9 @@ ompiled source #
 *.log
 *.sql
 *.sqlite
+*.pkl
+.list
+.hist
 
 ######################
 # OS generated files #
@@ -39,9 +42,9 @@ ompiled source #
 ehthumbs.db
 Thumbs.db
 
-#################
+################
 # Text Editors #
-#################
+################
 *~
 *#
 *.py[oc]
@@ -50,3 +53,4 @@ Thumbs.db
 auto-save-list
 tramp
 .\#*
+
