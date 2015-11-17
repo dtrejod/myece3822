@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 import os
 import sys
-import string
 from collections import Counter
 import pandas as pd
+import csv 
 
 # wordCounts class
 #
@@ -101,26 +101,48 @@ class wordCounts():
     # Create a span word histogram of all words in the dictionary
     #
     def createHistogram(self, span):
+        # Print to console that we producing a histogram
+        #
+        print('Producing a ' + str(span) + \
+                ' word histogram of dataset.')
         # Using collections we can create histogram.
         # We join together all entry columns containing contents. We also
         # reaplce all non-alphanumeric characters with spaces as not to ruin
         # our results using a regex. If needed we combine words over the span.
         #
-        words = " ".join(self.massWord[self.cols[1]].replace({\
+        words = " ".join(self.massWord[self.cols[1]].str.lower().replace({\
                 '[^0-9a-zA-Z]+': ' '}, regex=True)).split()
+
+        # If we are not doing a histogram of single words we regroup our
+        # list of words using another join
+        #
         if(span != 1):
-            words = [" ".join(words[i:i+span]) for i in range(0, \
-                len(words), span)]
+            words = [" ".join(words[i:i+span]) for i in xrange(0, \
+                len(words), 1)]
         word_counts = Counter(words)
-        #word_counts = Counter(" ".join(self.massWord[self.cols[1]]).split())
 
         # We convert the dictionary back to a dataframe allowing us to sort
         # by frequency
         #
-        df = pd.DataFrame.from_dict(word_counts, orient='index')
-        df.sort(columns=df.columns[0],inplace=True, ascending=False)
-        print(df)
- 
+        df = pd.DataFrame.from_dict(word_counts, orient='index').reset_index()
+        df.sort(columns=[df.columns[1], df.columns[0]],\
+                inplace=True, ascending=False)
+        
+        # Swap the counts and words columns (to obtain same formatting 
+        # that base would provide
+        #
+        df = df[[df.columns[1], df.columns[0]]]
+        
+        # Save results to file
+        #
+        #fileO = open('massWords_'+str(span)+'.hist', 'w')
+        #fileO.write(df.to_string(index=False, header=False))
+        df.to_csv('massWords_'+str(span)+'.hist', header=False,index=False,
+                sep=' ', quoting=csv.QUOTE_NONE, quotechar='', escapechar='\t')
+        # Print to console that histogram generation was successful
+        #
+        print('\tHistogram saved to "massWords_' + str(span) + '.hist".')
+               
     # Save the contents of the dataframe to a file
     #
     def saveData(self, fName):

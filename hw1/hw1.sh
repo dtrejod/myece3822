@@ -60,7 +60,7 @@ wc -l subsetc.list
 echo ""
 # Produce Histogram
 echo "Producing histogram of words in Subset A."
-xargs cat < subseta.list | tr -sc '[A-Z][a-z]' '[\012*]' > subseta.words
+xargs cat < subseta.list | tr '[A-Z]' '[a-z]' | tr -sc '[:alnum:]' '[\012*]' > subseta.words
 sort subseta.words | uniq -ic | sort -nr > subseta.hist
 echo "    Histogram saved to subseta.hist"
 
